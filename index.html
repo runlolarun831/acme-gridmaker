@@ -9,12 +9,38 @@
     height: 3rem;
     width: 80%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
   }
-  #rowError {
+  .error {
     color: red;
     font-size: 2rem;
   }
+  #grid {
+    height: 30rem;
+
+    background-color: pink;
+  }
+  #gridSize {
+
+    background-color: yellow;
+  }
+  .row {
+        display: flex;
+        width: 12rem;
+        height: 6rem;
+        background: blue;
+        flex-direction:center;
+      }
+      .cell {
+        width: 3 rem;
+        height: 3 rem;
+        border: solid 1px black;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 </style>
   </head>
   <body>
@@ -22,11 +48,11 @@
     <form id='gridSize'>
       <h1 id='title'>Acme Grid Maker</h1>
       <input name='row'/><br>
-
-      <input  name='column'/><br>
-      <div id='rowError'></div>
-
-      <button disabled='disabled'>Make Grid</button>
+      <div id='rowError' class='error'></div>
+      <input name='column'/><br>
+      <div id='colError' class='error'></div>
+      <button>Make Grid</button>
+   <!---   <button disabled='disabled'>Make Grid</button>-->
     </form>
 
     <div id="grid"></div>
@@ -41,37 +67,111 @@
     const inputRow = document.querySelector('[name="row"]');
     const inputCol = document.querySelector('[name="column"]');
     const form = document.querySelector('form');
-    const errorMessage = document.querySelector('#rowError');
+    const rowErrorMessage = document.querySelector('#rowError');
+    const colErrorMessage = document.querySelector('#colError');
     const button = document.querySelector('button');
+
 
     inputRow.addEventListener('input', (ev) => {
       const rowVal = parseInt(ev.target.value)
-      console.log(Number.isInteger(rowVal));
+
       if (((rowVal < 1 ) || (rowVal > 50)) || !(Number.isInteger(rowVal)) ) {
-        errorMessage.innerHTML = 'Row needs to be a number between 1 and 50';
+        rowErrorMessage.innerHTML = 'Row needs to be a number between 1 and 50';
         button.setAttribute('disabled', 'disabled');
       }
       else {
-        errorMessage.innerHTML = '';
-        button.removeAttribute('disabled');
+        rowErrorMessage.innerHTML = '';
+        if (colErrorMessage.innerHTML === '') {
+ //         button.removeAttribue('disabled');
+        }
+        // if (rowErrorMessage === true && colErrorMessage === true) {
+        //   button.removeAttribue('disabled');
+        // }
+        //button.removeAttribute('disabled');
       }
-      inputCol.addEventListener('input', (ev) => {
+    inputCol.addEventListener('input', (ev) => {
       const colVal = parseInt(ev.target.value)
+
       if((( colVal < 1 ) || ( colVal > 50)) || !(Number.isInteger(colVal)) ) {
-        errorMessage.innerHTML = 'Column needs to be a number between 1 and 50';
+        colErrorMessage.innerHTML = 'Column needs to be a number between 1 and 50';
         button.setAttribute('disabled', 'disabled');
       }
       else {
-        errorMessage.innerHTML = '';
-        button.removeAttribute('disabled');
+        colErrorMessage.innerHTML = '';
+        if (rowErrorMessage.innerHTML ==='') {
+ //         button.removeAttribue('disabled');
+        }
+        // if (rowErrorMessage === true && colErrorMessage === true) {
+        //   button.removeAttribue('disabled');
+        // }
+        //button.removeAttribute('disabled');
       }
       });
-  });
+    });
+
+    //need to work on make grid button
+    //event can only go throu if row and col are dissabled
+
+    button.addEventListener('click',(ev) =>{
+    //console.log(inputRow.value);
+    //console.log(inputCol.value);
+    //console.log(generateRxC(inputRow.value, inputCol.value));
+    generateRxC(inputRow.value, inputCol.value);
+
+    }
+    );
+
+
     form.addEventListener('submit', (ev)=> {
       ev.preventDefault();
       //console.log('do something else');
     });
 
+
+    const generateRxC = (rowVal11, colVal11) => {
+      const rows = [];
+      for (let i = 0; i < rowVal11; i++) {
+        const row = [];
+        rows.push(row);
+        for (let j = 0; j < colVal11; j++) {
+          row.push(0);
+        }
+      }
+      return rows;
+    };
+     //console.log(generateRxC(rowVal1,colVal1));
+    const generateHTML = (rows) => {
+      return rows.map(row => `
+      <div class='row'>
+      ${ row.map( cell => `<div class='cell'>
+      ${ cell } </div>`).join('')}
+      </div>
+      `).join('');
+    };
+
+    //const data = generateRxC(rowVal1,colVal1);
+    const data = generateRxC(inputRow.value,inputCol.value)
+    const grid = document.querySelector('#grid');
+
+    grid.addEventListener('click', (ev)=> {
+    const cell = ev.target;
+    const row = cell.parentNode;
+    //need to find where target is located on the grid
+    const cdx = [...row.children].indexOf(cell); // use spread 'splat' operator * see splat.js
+    const rdx = [...row.parentNode.children].indexOf(row); //fyi row.parentNode is the grid
+    data[rdx][cdx]++; //add count each time clicked
+    //console.log(rdx);
+    //console.log(data); /// data is empty strings
+    console.log(grid[0].children[0]);  //check this out and work from here
+    console.table(data);
+    render();
+  })
+    //create html with grid
+    const render = ()=> {
+    const html = generateHTML(data);
+    grid.innerHTML = html;
+  };
+  render(); //make new grid
 
 
   </script>
