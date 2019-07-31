@@ -21,7 +21,7 @@
     <div id='container'>
     <form id='gridSize'>
       <h1 id='title'>Acme Grid Maker</h1>
-      <input type='number' name='row'/><br>
+      <input name='row'/><br>
       <div id='rowError'></div>
       <input  name='column'/><br>
       <div id='colError'></div>
@@ -41,15 +41,18 @@
     const inputCol = document.querySelector('[name="column"]');
     const form = document.querySelector('form');
     const errorMessage = document.querySelector('#rowError');
+    const button = document.querySelector('button');
 
     //working on validation on forms also how to get form values
     inputRow.addEventListener('input', (ev) => {
       console.log(ev.target.value, ' is a ', typeof (ev.target.value));
       //console.log(typeof (ev.target.value));
       //zero is passing the conditional for some reason
-      if((ev.target.value < 1 ) || (ev.target.value > 50) || typeof( ev.target.value)  === 'NaN' ) {
+      const rowVal = parseInt(ev.target.value)
+      console.log(rowVal, ' is a ', typeof (rowVal));
+      if((rowVal < 1 ) || (rowVal > 50) || typeof( rowVal)  === 'NaN' ) {
         errorMessage.innerHTML = 'row needs to be a number between 1 and 50';
-        button.addAttribute('disabled', 'disabled');
+        button.addAttribute('disabled', 'disabled');///figure this out
       }
 
     });
@@ -61,3 +64,9 @@
 
   </script>
 </html>
+/* plan of attack
+finish form val (15min)
+make grid (1 hour)
+work on color cells(1 hour)
+row vs <col> (20min)
+finish styling(until deadline)
