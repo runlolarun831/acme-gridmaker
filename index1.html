@@ -16,6 +16,9 @@
     color: red;
     font-size: 2rem;
   }
+  #selected {
+    background-color: blue;
+  }
   #grid {
     height: 30rem;
 
@@ -25,25 +28,22 @@
 
     background-color: yellow;
   }
-  .selected {
-    background-color: teal;
-  }
   .row {
-    display: flex;
-    width: 12rem;
-    height: 6rem;
-    /*background: blue;*/
-    flex-direction:center;
-  }
-.cell {
-  width: 3 rem;
-  height: 3 rem;
-  border: solid 1px black;
-  background-color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+        display: flex;
+        width: 12rem;
+        height: 6rem;
+        /*background: blue;*/
+        flex-direction:center;
+      }
+      .cell {
+        width: 3 rem;
+        height: 3 rem;
+        border: solid 1px black;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 </style>
   </head>
   <body>
@@ -75,57 +75,6 @@
     const grid = document.querySelector('#grid');
     let data = [];
 
-    inputRow.addEventListener('input', (ev) => {
-      const rowVal = parseInt(ev.target.value)
-
-      if (((rowVal < 1 ) || (rowVal > 50)) || !(Number.isInteger(rowVal)) ) {
-        rowErrorMessage.innerHTML = 'Row needs to be a number between 1 and 50';
-        button.setAttribute('disabled', 'disabled');
-      }
-      else {
-        rowErrorMessage.innerHTML = '';
-        if (colErrorMessage.innerHTML === '') {
-         button.removeAttribute('disabled');
-        }
-        if (rowErrorMessage === true && colErrorMessage === true) {
-           button.removeAttribute('disabled');
-         }
-        button.removeAttribute('disabled');
-      }
-    inputCol.addEventListener('input', (ev) => {
-      const colVal = parseInt(ev.target.value)
-
-      if((( colVal < 1 ) || ( colVal > 50)) || !(Number.isInteger(colVal)) ) {
-        colErrorMessage.innerHTML = 'Column needs to be a number between 1 and 50';
-        button.setAttribute('disabled', 'disabled');
-      }
-      else {
-        colErrorMessage.innerHTML = '';
-        if (rowErrorMessage.innerHTML ==='') {
-         button.removeAttribute('disabled');
-        }
-        if (rowErrorMessage === true && colErrorMessage === true) {
-          button.removeAttribute('disabled');
-        }
-        button.removeAttribute('disabled');
-      }
-      });
-    });
-
-    button.addEventListener('click',(ev) =>{
-      console.log(inputRow.value);
-      console.log(inputCol.value);
-      console.log(generateRxC(inputRow.value, inputCol.value));
-      data = generateRxC(inputRow.value, inputCol.value);
-      render(); //initial render of grid
-    }
-    );
-
-    form.addEventListener('submit', (ev)=> {
-      ev.preventDefault();
-      //console.log('do something else');
-    });
-
     const generateRxC = (rowVal, colVal) => {
       const rows = [];
       for (let i = 0; i < rowVal; i++) {
@@ -146,32 +95,93 @@
         </div>
       `).join('');
     };
-
-    //const data = generateRxC(rowVal1,colVal1);
+        //const data = generateRxC(rowVal1,colVal1);
     //let data = generateRxC(inputRow.value,inputCol.value)
     //const grid = document.querySelector('#grid');
 
-    grid.addEventListener('click', (ev)=> {
-    const cell = ev.target;
-    cell.style.backgroundColor = 'teal';
-    const row = cell.parentNode;
-    const cdx = [...row.children].indexOf(cell);
-    const rdx = [...row.parentNode.children].indexOf(row);
-    cell.setAtribute('selected', 'selected'); ///trying to color cell
-    //data[rdx][cdx]++;
-
-    //console.log(grid[0].children[0]);  //check this out and
-    //console.table(data);
-    render();
-  })
    // create html with grid
-    const render = ()=> {
-    console.log(data);
+   const render = ()=> {
+    //console.log(data);
     const html = generateHTML(data);
     grid.innerHTML = html;
-    console.log(html);
+    //console.log(html);
   };
-  render(); //make new grid
+
+ /* user interaction code starts here */
+    form.addEventListener('submit', (ev)=> {
+      ev.preventDefault();
+      //console.log('do something else');
+    });
+
+/* UI for row */
+    inputRow.addEventListener('input', (ev) => {
+      const rowVal = parseInt(ev.target.value)
+
+      if (((rowVal < 1 ) || (rowVal > 50)) || !(Number.isInteger(rowVal)) ) {
+        rowErrorMessage.innerHTML = 'Row needs to be a number between 1 and 50';
+        button.setAttribute('disabled', 'disabled');
+      }
+      else {
+        rowErrorMessage.innerHTML = '';
+        if (colErrorMessage.innerHTML === '') {
+         button.removeAttribute('disabled');
+        }
+        if (rowErrorMessage === true && colErrorMessage === true) {
+           button.removeAttribute('disabled');
+         }
+        button.removeAttribute('disabled');
+      }
+
+/* UI for column */
+    inputCol.addEventListener('input', (ev) => {
+      const colVal = parseInt(ev.target.value)
+
+      if((( colVal < 1 ) || ( colVal > 50)) || !(Number.isInteger(colVal)) ) {
+        colErrorMessage.innerHTML = 'Column needs to be a number between 1 and 50';
+        button.setAttribute('disabled', 'disabled');
+      }
+      else {
+        colErrorMessage.innerHTML = '';
+        if (rowErrorMessage.innerHTML ==='') {
+         button.removeAttribute('disabled');
+        }
+        if (rowErrorMessage === true && colErrorMessage === true) {
+          button.removeAttribute('disabled');
+        }
+        button.removeAttribute('disabled');
+      }
+      });
+    });
+
+/* UI for button initiates grid creation and render */
+    button.addEventListener('click',(ev) =>{
+      //console.log(inputRow.value);
+      //console.log(inputCol.value);
+      //console.log(generateRxC(inputRow.value, inputCol.value));
+      data = generateRxC(inputRow.value, inputCol.value);
+      render(); //initial render of grid
+    }
+    );
+/* UI cell selection upon click, cell colored and grid recreated & rendered */
+    grid.addEventListener('click', (ev)=> {
+      const cell = ev.target;
+      console.log('cell ', cell);
+      const row = cell.parentNode;
+      const cdx = [...row.children].indexOf(cell);
+      const rdx = [...row.parentNode.children].indexOf(row);
+      console.log('rdx ', rdx);
+      data[rdx][cdx]++;
+
+      cell.setAttribute('selected','selected')
+
+      //console.log(data); // data is empty string
+      //console.log(grid[0].children[0]);  //check this out and
+      //data[rdx][cdx]++;
+      //console.table(data);
+      render(); //renders updated grid after click cell selection
+  })
+
+  render(); //make new page??
 
 
   </script>
