@@ -153,11 +153,13 @@
 
     grid.addEventListener('click', (ev)=> {
     const cell = ev.target;
-    cell.style.backgroundColor = 'teal';
+    cell.style.backgroundColor = 'teal'; ///got this fsa solution
     const row = cell.parentNode;
     const cdx = [...row.children].indexOf(cell);
     const rdx = [...row.parentNode.children].indexOf(row);
     cell.setAtribute('selected', 'selected'); ///trying to color cell
+    //cell.setAttribute('selected', 'selected'); ///trying to color cell correct spelling
+    ///super duper weird that coloring cell only works when i mispell "setAttribute"
     //data[rdx][cdx]++;
 
     //console.log(grid[0].children[0]);  //check this out and
