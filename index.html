@@ -36,13 +36,14 @@
     flex-direction:center;
   }
 .cell {
-  width: 3 rem;
-  height: 3 rem;
+  width: 3rem;
+  height: 3rem;
   border: solid 1px black;
   background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
+  content: '';
 }
 </style>
   </head>
@@ -132,7 +133,7 @@
         const row = [];
         rows.push(row);
         for (let j = 0; j < colVal; j++) {
-          row.push(0);
+          row.push(' ');
         }
       }
       return rows;
@@ -150,28 +151,29 @@
     //const data = generateRxC(rowVal1,colVal1);
     //let data = generateRxC(inputRow.value,inputCol.value)
     //const grid = document.querySelector('#grid');
-
+    console.log(grid);
     grid.addEventListener('click', (ev)=> {
     const cell = ev.target;
     cell.style.backgroundColor = 'teal'; ///got this fsa solution
+    cell.classList.add('selected');
     const row = cell.parentNode;
     const cdx = [...row.children].indexOf(cell);
     const rdx = [...row.parentNode.children].indexOf(row);
-    cell.setAtribute('selected', 'selected'); ///trying to color cell
+    //cell.setAtribute('selected', 'selected'); ///trying to color cell
     //cell.setAttribute('selected', 'selected'); ///trying to color cell correct spelling
     ///super duper weird that coloring cell only works when i mispell "setAttribute"
     //data[rdx][cdx]++;
 
     //console.log(grid[0].children[0]);  //check this out and
     //console.table(data);
-    render();
+    //render();
   })
    // create html with grid
     const render = ()=> {
-    console.log(data);
+    //console.log(data);
     const html = generateHTML(data);
     grid.innerHTML = html;
-    console.log(html);
+    //console.log(html);
   };
   render(); //make new grid
 
